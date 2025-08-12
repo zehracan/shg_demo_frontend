@@ -553,13 +553,13 @@ export default {
 
         const response = await axios.post('/api/GocmenOperasyon', {
           olayNo: this.form.olayNo,
-          olayTarihi: this.form.olayTarihi,
+          olayTarihi: new Date(this.formData.olayTarihi).toISOString(),
           bolge: this.form.bolge,
           deniz: this.form.deniz,
           il: this.form.il,
           ilce: this.form.ilce,
-          enlem: this.form.enlem ? parseFloat(this.form.enlem) : null,
-          boylam: this.form.boylam ? parseFloat(this.form.boylam) : null,
+          enlem: this.form.enlem,
+          boylam: this.form.boylam,
           uyruk: this.form.uyruk,
           gocmenSayisi: parseInt(this.form.gocmenSayisi) || 0,
           gecmeTesebbusYer: this.form.gecmeTesebbusYer,
