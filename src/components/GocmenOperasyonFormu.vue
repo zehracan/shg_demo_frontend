@@ -71,7 +71,7 @@
                 <b-form-select id="il" v-model="form.il" :options="ilOptions" @change="onIlChange" required></b-form-select>
               </b-form-group>
             </div>
-            
+
             <div class="col-md-6">
               <b-form-group label="İlçe" label-for="ilce" required>
                 <b-form-select id="ilce" v-model="form.ilce" :options="ilceOptions" :disabled="!form.il" required></b-form-select>
@@ -108,6 +108,19 @@
             </div>
           </div>
 
+          <div class="row p-2 mb-2 mt-3 bg-light border rounded">
+              <div class="col-md-6">
+                <b-form-group label="Kategori" label-for="olay-kategorisi" required>
+                  <b-form-select v-model="form.olayKategorisi" :options="olayKategoriOptions" required></b-form-select>
+                </b-form-group>
+              </div>
+              <div class="col-md-6">
+                <b-form-group label="Denize Atma" label-for="denize-atma" required>
+                    <b-form-select v-model="form.denizeAtma" :options="varYokOptions" required></b-form-select>
+                </b-form-group>
+              </div>
+          </div>
+
           <!-- Uyruk ve Sayıları Bölümü -->
           <h5 class="mt-4 text-primary">Uyruk ve Sayıları *</h5>
           <hr class="mt-0">
@@ -122,7 +135,7 @@
               </template>
           </b-table>
 
-          <!-- Vasıta Bilgileri Bölümü (GÜNCELLENDİ) -->
+          <!-- Vasıta Bilgileri Bölümü -->
           <h5 class="mt-4 text-primary">Vasıta Bilgileri</h5>
           <hr class="mt-0">
           <div class="p-2 mb-2 bg-light border rounded">
@@ -131,9 +144,7 @@
                     <b-form-group label="Vasıta İsmi" required>
                       <b-form-select v-model="form.vasitaIsmi" :options="vasitaIsmiOptions" required>
                           <template #first>
-                            <b-form-select-option :value="null" disabled>
-                              Vasıta ismi seçiniz
-                            </b-form-select-option>
+                            <b-form-select-option :value="null" disabled>Vasıta ismi seçiniz</b-form-select-option>
                           </template>
                       </b-form-select>
                     </b-form-group>
@@ -145,19 +156,31 @@
                   </div>
                   <div class="col-md-4">
                     <b-form-group label="Kategori" required>
-                      <b-form-input v-model="form.kategori" required></b-form-input>
+                      <b-form-select v-model="form.kategori" :options="vasitaKategoriOptions" required>
+                         <template #first>
+                            <b-form-select-option :value="null" disabled>Kategori seçiniz</b-form-select-option>
+                          </template>
+                      </b-form-select>
                     </b-form-group>
                   </div>
               </div>
               <div class="row">
                   <div class="col-md-4">
                     <b-form-group label="Üretim Yeri" required>
-                      <b-form-input v-model="form.uretimYeri" required></b-form-input>
+                      <b-form-select v-model="form.uretimYeri" :options="vasitaUretimYeriOptions" required>
+                        <template #first>
+                            <b-form-select-option :value="null" disabled>Üretim yeri seçiniz</b-form-select-option>
+                          </template>
+                      </b-form-select>
                     </b-form-group>
                   </div>
                   <div class="col-md-4">
                     <b-form-group label="Seri No" required>
-                      <b-form-input v-model="form.seriNo" required></b-form-input>
+                       <b-form-select v-model="form.seriNo" :options="vasitaSeriNoOptions" required>
+                        <template #first>
+                            <b-form-select-option :value="null" disabled>Seri no seçiniz</b-form-select-option>
+                          </template>
+                      </b-form-select>
                     </b-form-group>
                   </div>
                   <div class="col-md-4">
@@ -199,31 +222,22 @@
           <h5 class="mt-4 text-primary">Diğer Bilgiler</h5>
           <hr class="mt-0">
           <div class="row">
-              <div class="col-md-3"><b-form-group label="Yakalanan Türk Sayısı" label-for="yakalanan-turk" required><b-form-input v-model.number="form.yakalananTurk" type="number" min="0" required></b-form-input></b-form-group></div>
-              <div class="col-md-3"><b-form-group label="Organizatör Sayısı" label-for="organizator" required><b-form-input v-model.number="form.organizatorSayisi" type="number" min="0" required></b-form-input></b-form-group></div>
-              <div class="col-md-3">
-                <b-form-group label="Geri İtme" label-for="geri-itme" required>
-                  <b-form-select v-model="form.geriItme" :options="geriItmeOptions" required></b-form-select>
-                </b-form-group>
-              </div>
-              <div class="col-md-3"><b-form-group label="SG/Müşterek" label-for="sg-mi" required><b-form-radio-group v-model="form.sgMi" :options="sgOptions" buttons button-variant="outline-primary" class="w-100"></b-form-radio-group></b-form-group></div>
+              <div class="col-md-4"><b-form-group label="Yakalanan Türk Sayısı" label-for="yakalanan-turk" required><b-form-input v-model.number="form.yakalananTurk" type="number" min="0" required></b-form-input></b-form-group></div>
+              <div class="col-md-4"><b-form-group label="Organizatör Sayısı" label-for="organizator" required><b-form-input v-model.number="form.organizatorSayisi" type="number" min="0" required></b-form-input></b-form-group></div>
+              <div class="col-md-4"><b-form-group label="SG/Müşterek" label-for="sg-mi" required><b-form-radio-group v-model="form.sgMi" :options="sgOptions" buttons button-variant="outline-primary" class="w-100"></b-form-radio-group></b-form-group></div>
           </div>
           <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <b-form-group label="İhbar Tipi" label-for="ihbar-tipi" required>
                   <b-form-select v-model="form.ihbarTipi" :options="ihbarTipiOptions" required></b-form-select>
                 </b-form-group>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <b-form-group label="İhbar Kaynağı" label-for="ihbar-kaynagi" required>
                   <b-form-select v-model="form.ihbarKaynagi" :options="ihbarKaynagiOptions" required></b-form-select>
                 </b-form-group>
               </div>
-              <div class="col-md-4">
-                <b-form-group label="Denize Atma" label-for="denize-atma" required>
-                    <b-form-select v-model="form.denizeAtma" :options="denizeAtmaOptions" required></b-form-select>
-                </b-form-group>
-              </div>
+
           </div>
 
           <!-- Butonlar -->
@@ -272,19 +286,21 @@ export default {
         yer: null,
         enlem: '',
         boylam: '',
+        olayKategorisi: null,
+        denizeAtma: null,
         yakalananTurk: 0,
         organizatorSayisi: 0,
-        geriItme: null,
+       
         ihbarTipi: null,
         ihbarKaynagi: null,
-        denizeAtma: null,
+       
         sgMi: true,
         uyruklar: [],
         vasitaIsmi: null,
         kullanilanVasita: null,
-        kategori: '',
-        uretimYeri: '',
-        seriNo: '',
+        kategori: null,
+        uretimYeri: null,
+        seriNo: null,
         benzinVarYok: 'Yok',
         saglamHasarli: 'Sağlam',
         hareketsiz: 'Hayır',
@@ -304,15 +320,22 @@ export default {
       gecmeTesebbusOptions: [ { value: 'BULAMAÇ', text: 'BULAMAÇ' }, { value: 'DEDEAĞAÇ', text: 'DEDEAĞAÇ' }, { value: 'KKTC', text: 'KKTC' }, { value: 'LİMNİ', text: 'LİMNİ' }, { value: 'MEİS', text: 'MEİS' }, { value: 'MİDİLLİ', text: 'MİDİLLİ' }, { value: 'RODOS', text: 'RODOS' }, { value: 'SAKIZ', text: 'SAKIZ' }, { value: 'SÖMBEKİ', text: 'SÖMBEKİ' }, { value: 'SİSAM', text: 'SİSAM' }, { value: 'VAN', text: 'VAN' }, { value: 'İSTANKÖY', text: 'İSTANKÖY' }, { value: 'İTALYA', text: 'İTALYA' } ],
       vasitaIsmiOptions: [ { value: '2 CAN SALI', text: '2 CAN SALI' }, { value: '3 CAN SALI', text: '3 CAN SALI' }, { value: '4 CAN SALI', text: '4 CAN SALI' }, { value: 'ADA-34', text: 'ADA-34' }, { value: 'ADA/KARA ÜZERİNDEN', text: 'ADA/KARA ÜZERİNDEN' }, { value: 'ASTERİ', text: 'ASTERİ' }, { value: 'ASİL TÜRK', text: 'ASİL TÜRK' }, { value: 'ATABEY-35', text: 'ATABEY-35' }, { value: 'BODOTO 10', text: 'BODOTO 10' }, { value: 'BİR MASAL', text: 'BİR MASAL' }, { value: 'CAPTAIN ZÜLFÜ', text: 'CAPTAIN ZÜLFÜ' }, { value: 'ÇEPELİ', text: 'ÇEPELİ' }, { value: 'DEDEAĞAÇ', text: 'DEDEAĞAÇ' }, { value: 'DOLPHİ', text: 'DOLPHİ' }, { value: 'ELİF', text: 'ELİF' }, { value: 'EMİNE', text: 'EMİNE' }, { value: 'ERAY', text: 'ERAY' }, { value: 'FENİKS', text: 'FENİKS' }, { value: 'FRİXOS', text: 'FRİXOS' }, { value: 'GOOD MOON', text: 'GOOD MOON' }, { value: 'KARATAŞ 1', text: 'KARATAŞ 1' }, { value: 'KAZAN-1', text: 'KAZAN-1' }, { value: 'KIBRIS', text: 'KIBRIS' }, { value: 'KOTİL', text: 'KOTİL' }, { value: 'LİMON-3', text: 'LİMON-3' }, { value: 'MESUT REİS', text: 'MESUT REİS' }, { value: 'MUĞLA-1', text: 'MUĞLA-1' }, { value: 'MUSTAFA', text: 'MUSTAFA' }, { value: 'NURAY', text: 'NURAY' }, { value: 'ONUR', text: 'ONUR' }, { value: 'PARSS-1 VE ADA 34', text: 'PARSS-1 VE ADA 34' }, { value: 'RACİNG 1', text: 'RACİNG 1' }, { value: 'RAGNAR-47', text: 'RAGNAR-47' }, { value: 'RONYA', text: 'RONYA' }, { value: 'RÜZGAR REİS 01', text: 'RÜZGAR REİS 01' }, { value: 'S. AMAZON 35', text: 'S. AMAZON 35' }, { value: 'SKY 48', text: 'SKY 48' }, { value: 'SUVAARİ', text: 'SUVAARİ' }, { value: 'ŞAHİN-1', text: 'ŞAHİN-1' }, { value: 'T.C.G.S. 902', text: 'T.C.G.S. 902' }, { value: 'T.C.S.G. 311', text: 'T.C.S.G. 311' }, { value: 'TRİTON', text: 'TRİTON' }, { value: 'UMBRA', text: 'UMBRA' }, { value: 'VENESUELLA', text: 'VENESUELLA' }, { value: 'WHİTE GREAM', text: 'WHİTE GREAM' }, { value: 'YEDİTEPE-1', text: 'YEDİTEPE-1' }, { value: 'YUSUF REİS-3', text: 'YUSUF REİS-3' }, { value: 'YÜZEREK', text: 'YÜZEREK' }, { value: 'İSİMSİZ', text: 'İSİMSİZ' }, { value: 'ŞİŞME YATAK', text: 'ŞİŞME YATAK' } ],
       kullanilanVasitaOptions: [ { value: 'ADA/KARA ÜZERİNDEN', text: 'ADA/KARA ÜZERİNDEN' }, { value: 'AHŞAP TEKNE', text: 'AHŞAP TEKNE' }, { value: 'BALIK AVLAMA TEKNESİ', text: 'BALIK AVLAMA TEKNESİ' }, { value: 'BALIKÇI', text: 'BALIKÇI' }, { value: 'CAN SALI', text: 'CAN SALI' }, { value: 'DENİZ ÜZERİNDEN', text: 'DENİZ ÜZERİNDEN' }, { value: 'FERİBOT', text: 'FERİBOT' }, { value: 'FİBER KARİNALI LASTİK BOT', text: 'FİBER KARİNALI LASTİK BOT' }, { value: 'FİBER TEKNE', text: 'FİBER TEKNE' }, { value: 'GÖÇMEN BOT', text: 'GÖÇMEN BOT' }, { value: 'JANDARMA BOT', text: 'JANDARMA BOT' }, { value: 'LASTİK BOT', text: 'LASTİK BOT' }, { value: 'MASAÜSTÜ BOT', text: 'MASAÜSTÜ BOT' }, { value: 'MOTORLU ZODYAK', text: 'MOTORLU ZODYAK' }, { value: 'RIB BOT', text: 'RIB BOT' }, { value: 'SAHİL GÜVENLİK BOT', text: 'SAHİL GÜVENLİK BOT' }, { value: 'SAVUNMA BOT', text: 'SAVUNMA BOT' } ],
+      vasitaKategoriOptions: [ { value: 'LASTİK BOT', text: 'LASTİK BOT' }, { value: 'FİBER KARİNALI LASTİK BOT', text: 'FİBER KARİNALI LASTİK BOT' }, { value: 'CAN SALI', text: 'CAN SALI' }, { value: 'SÜRAT TEKNESİ', text: 'SÜRAT TEKNESİ' } ],
+      vasitaUretimYeriOptions: [ { value: 'SANCAK TEKNE (SANCAK 6,9)', text: 'SANCAK TEKNE (SANCAK 6,9)' } ],
+      vasitaSeriNoOptions: [ { value: 'TR SEMA 4664J424MOTOR NO:3B624947 (150 HP)', text: 'TR SEMA 4664J424MOTOR NO:3B624947 (150 HP)' } ],
       uyrukFields: [ { key: 'uyruk', label: 'Uyruk' }, { key: 'sayi', label: 'Sayı' }, { key: 'actions', label: 'İşlemler', class: 'text-right' } ],
       kategoriFields: [ { key: 'kategori', label: 'Kategori' }, { key: 'durum', label: 'Durum' }, { key: 'sayi', label: 'Sayı' }, { key: 'actions', label: 'İşlemler', class: 'text-right' } ],
       sgOptions: [ { text: 'SG', value: true }, { text: 'Müşterek', value: false } ],
       kategoriOptions: [ {value: 'Sağ', text: 'Sağ'}, {value: 'Yaralı', text: 'Yaralı'}, {value: 'Kayıp', text: 'Kayıp'}, {value: 'Ölü', text: 'Ölü'} ],
-      durumOptions: [ {value: 'Erkek', text: 'Erkek'}, {value: 'Kadın', text: 'Kadın'}, {value: 'Çocuk', text: 'Çocuk'} ],
-      geriItmeOptions: [ { value: 'Var', text: 'Var' }, { value: 'Yok', text: 'Yok' } ],
-      denizeAtmaOptions: [ { value: 'Var', text: 'Var' }, { value: 'Yok', text: 'Yok' } ],
-      ihbarTipiOptions: [ { value: 'Düzensiz Göç', text: 'Düzensiz Göç' }, { value: 'İnsan Kaçakçılığı', text: 'İnsan Kaçakçılığı' }, { value: 'İnsan Ticareti', text: 'İnsan Ticareti' }, { value: 'Belge Sahteciliği', text: 'Belge Sahteciliği' }, { value: 'Acil Durum', text: 'Acil Durum' } ],
-      ihbarKaynagiOptions: [ { value: 'Vatandaşlar', text: 'Vatandaşlar' }, { value: 'Kolluk Kuvvetleri', text: 'Kolluk Kuvvetleri' }, { value: 'Sivil Toplum Kuruluşları (STK)', text: 'Sivil Toplum Kuruluşları (STK)' }, { value: 'Göçmenler', text: 'Göçmenler' }, { value: 'Basın ve Medya', text: 'Basın ve Medya' } ],
+      durumOptions: [ {value: 'Erkek', text: 'Erkek'}, {value: 'Kadın', text: 'Kadın'}, {value: 'Erkek Çocuk', text: 'Erkek Çocuk'}, {value: 'Kız Çocuk', text: 'Kız Çocuk'} ],
+      varYokOptions: [ { value: 'Var', text: 'Var' }, { value: 'Yok', text: 'Yok' } ],
+      olayKategoriOptions: [
+        { value: 'Yakalama', text: 'Yakalama' },
+        { value: 'Geri İtme', text: 'Geri İtme' },
+        { value: 'Kurtarma', text: 'Kurtarma' }
+      ],
+      ihbarTipiOptions: [ { value: 'İhbarlı', text: 'İhbarlı' }, { value: 'İhbarsız', text: 'İhbarsız' } ],
+      ihbarKaynagiOptions: [ { value: 'AAKKM', text: 'AAKKM' }, { value: 'ALO 112', text: 'ALO 112' }, { value: 'ÇEŞME KOLDESTİM', text: 'ÇEŞME KOLDESTİM' }, { value: 'ÇEŞMEKOLDES', text: 'ÇEŞMEKOLDES' }, { value: 'DİKİLİ KOLDES', text: 'DİKİLİ KOLDES' }, { value: 'JANDARMA', text: 'JANDARMA' }, { value: 'JRCC PİRE', text: 'JRCC PİRE' }, { value: 'KB-112', text: 'KB-112' }, { value: 'KB-113', text: 'KB-113' }, { value: 'KB-14', text: 'KB-14' }, { value: 'KB-20', text: 'KB-20' }, { value: 'KB-22', text: 'KB-22' }, { value: 'KB-22,KB-89', text: 'KB-22,KB-89' }, { value: 'KB-35', text: 'KB-35' }, { value: 'KB-39', text: 'KB-39' }, { value: 'KB-4510', text: 'KB-4510' }, { value: 'KB-73', text: 'KB-73' }, { value: 'KB-75', text: 'KB-75' }, { value: 'KB-88', text: 'KB-88' }, { value: 'KB-89', text: 'KB-89' }, { value: 'KÜÇÜKKUYU KOLDESTİM', text: 'KÜÇÜKKUYU KOLDESTİM' }, { value: 'MORAD', text: 'MORAD' }, { value: 'MORAD-11', text: 'MORAD-11' }, { value: 'MORAD-12', text: 'MORAD-12' }, { value: 'MORAD-20', text: 'MORAD-20' }, { value: 'NATO', text: 'NATO' }, { value: 'RODOS LİMAN BAŞKANLIĞI', text: 'RODOS LİMAN BAŞKANLIĞI' }, { value: 'SAGUVEGE İSTH.', text: 'SAGUVEGE İSTH.' }, { value: 'SAGÜVEGE İSTH.', text: 'SAGÜVEGE İSTH.' }, { value: 'SAGÜVGÜNEGE İSTH.', text: 'SAGÜVGÜNEGE İSTH.' }, { value: 'SG İHA', text: 'SG İHA' }, { value: 'SGRS ÇEŞME', text: 'SGRS ÇEŞME' }, { value: 'SGYS', text: 'SGYS' }, { value: 'TCSG-107', text: 'TCSG-107' }, { value: 'TCSG-24', text: 'TCSG-24' }, { value: 'TCSG-27', text: 'TCSG-27' }, { value: 'TCSG-30', text: 'TCSG-30' }, { value: 'TCSG-311', text: 'TCSG-311' }, { value: 'TCSG-6', text: 'TCSG-6' }, { value: 'TCSG-61', text: 'TCSG-61' }, { value: 'TCSG-84', text: 'TCSG-84' }, { value: 'TCSG-904', text: 'TCSG-904' }, { value: 'TCSG-907', text: 'TCSG-907' }, { value: 'TCSG-908, TCSG-903, TCSG-66', text: 'TCSG-908, TCSG-903, TCSG-66' } ],
     };
   },
   computed: {
@@ -374,8 +397,11 @@ export default {
 
       const fieldsToValidate = [
         { key: 'olayNo', label: 'Olay No' }, { key: 'olayTarihi', label: 'Olay Tarihi' }, { key: 'olaySaati', label: 'Olay Saati' }, { key: 'bolge', label: 'Bölge' }, { key: 'deniz', label: 'Deniz' }, { key: 'yer', label: 'Geçme Teşebbüs Yeri' }, { key: 'il', label: 'İl' }, { key: 'ilce', label: 'İlçe' }, { key: 'enlem', label: 'Enlem' }, { key: 'boylam', label: 'Boylam' },
-        { key: 'vasitaIsmi', label: 'Vasıta İsmi' }, { key: 'kullanilanVasita', label: 'Kullanılan Vasıta' }, { key: 'kategori', label: 'Vasıta Kategorisi' }, { key: 'uretimYeri', label: 'Üretim Yeri' }, { key: 'seriNo', label: 'Seri No' }, { key: 'saglamHasarli', label: 'Sağlam/Hasarlı' }, { key: 'benzinVarYok', label: 'Benzin Durumu' }, { key: 'hareketsiz', label: 'Hareketsiz Durumu' },
-        { key: 'geriItme', label: 'Geri İtme' }, { key: 'ihbarTipi', label: 'İhbar Tipi' }, { key: 'ihbarKaynagi', label: 'İhbar Kaynağı' }, { key: 'denizeAtma', label: 'Denize Atma' },
+        { key: 'olayKategorisi', label: 'Kategori' }, { key: 'denizeAtma', label: 'Denize Atma' },
+        { key: 'vasitaIsmi', label: 'Vasıta İsmi' }, { key: 'kullanilanVasita', label: 'Kullanılan Vasıta' }, 
+        { key: 'kategori', label: 'Vasıta Kategori' }, { key: 'uretimYeri', label: 'Vasıta Üretim Yeri' }, { key: 'seriNo', label: 'Vasıta Seri No' }, 
+        { key: 'saglamHasarli', label: 'Sağlam/Hasarlı' }, { key: 'benzinVarYok', label: 'Benzin Durumu' }, { key: 'hareketsiz', label: 'Hareketsiz Durumu' },
+        { key: 'ihbarTipi', label: 'İhbar Tipi' }, { key: 'ihbarKaynagi', label: 'İhbar Kaynağı' },
       ];
 
       for (const field of fieldsToValidate) {
@@ -404,6 +430,9 @@ export default {
         
         const payload = {
           ...this.form,
+          
+          kategori: this.form.olayKategorisi,
+
           yil: olayTarihiDate.getFullYear(),
           ay: olayTarihiDate.getMonth() + 1,
           gun: olayTarihiDate.getDate(),
@@ -424,7 +453,9 @@ export default {
           }]
         };
         
-        ['vasitaIsmi', 'kullanilanVasita', 'kategori', 'uretimYeri', 'seriNo', 'benzinVarYok', 'saglamHasarli', 'hareketsiz'].forEach(key => delete payload[key]);
+        delete payload.olayKategorisi;
+
+        ['vasitaIsmi', 'kullanilanVasita', 'uretimYeri', 'seriNo', 'benzinVarYok', 'saglamHasarli', 'hareketsiz'].forEach(key => delete payload[key]);
 
         const response = await axios.post('/api/GocmenOperasyon', payload);
 
@@ -455,25 +486,27 @@ export default {
         yer: null,
         enlem: '',
         boylam: '',
+        olayKategorisi: null,
+        denizeAtma: null,
         yakalananTurk: 0,
         organizatorSayisi: 0,
-        geriItme: null,
+        
         ihbarTipi: null,
         ihbarKaynagi: null,
-        denizeAtma: null,
+        
         sgMi: true,
         uyruklar: [],
         vasitaIsmi: null,
         kullanilanVasita: null,
-        kategori: '',
-        uretimYeri: '',
-        seriNo: '',
+        kategori: null,
+        uretimYeri: null,
+        seriNo: null,
         benzinVarYok: 'Yok',
         saglamHasarli: 'Sağlam',
         hareketsiz: 'Hayır',
         kategoriler: [],
       };
-      this.yeniUyruk = { uyruk: null, sayi: 1 };
+    this.yeniUyruk = { uyruk: null, sayi: 1 };
       this.yeniKategori = { kategori: null, durum: null, sayi: 0 };
       this.ilceOptions = [];
     },
