@@ -68,13 +68,25 @@
           <div class="row">
             <div class="col-md-6">
               <b-form-group label="İl" label-for="il" required>
-                <b-form-select id="il" v-model="form.il" :options="ilOptions" @change="onIlChange" required></b-form-select>
+                <b-form-select id="il" v-model="form.il" :options="ilOptions" @change="onIlChange" required>
+                   <template #first>
+                    <b-form-select-option :value="null" disabled>
+                      İl seçiniz
+                    </b-form-select-option>
+                  </template>
+                </b-form-select>
               </b-form-group>
             </div>
 
             <div class="col-md-6">
               <b-form-group label="İlçe" label-for="ilce" required>
-                <b-form-select id="ilce" v-model="form.ilce" :options="ilceOptions" :disabled="!form.il" required></b-form-select>
+                <b-form-select id="ilce" v-model="form.ilce" :options="ilceOptions" :disabled="!form.il" required>
+                   <template #first>
+                    <b-form-select-option :value="null" disabled>
+                      İlçe seçiniz
+                    </b-form-select-option>
+                  </template>
+                </b-form-select>
               </b-form-group>
             </div>
           </div>
@@ -233,8 +245,14 @@
                 </b-form-group>
               </div>
               <div class="col-md-6">
-                <b-form-group label="İhbar Kaynağı" label-for="ihbar-kaynagi" required>
-                  <b-form-select v-model="form.ihbarKaynagi" :options="ihbarKaynagiOptions" required></b-form-select>
+
+                <b-form-group label="İhbar Kaynağı" label-for="ihbar-kaynagi" :required="form.ihbarTipi !== 'İhbarsız'">
+                  <b-form-select
+                    v-model="form.ihbarKaynagi"
+                    :options="ihbarKaynagiOptions"
+                    :disabled="form.ihbarTipi === 'İhbarsız'"
+                    :required="form.ihbarTipi !== 'İhbarsız'"
+                  ></b-form-select>
                 </b-form-group>
               </div>
 
@@ -293,7 +311,7 @@ export default {
        
         ihbarTipi: null,
         ihbarKaynagi: null,
-       
+        
         sgMi: true,
         uyruklar: [],
         vasitaIsmi: null,
@@ -312,10 +330,13 @@ export default {
       modalTitle: '',
       modalMessage: '',
       modalVariant: 'success',
+    
+      ilOptions: [],
       ilceOptions: [],
+
       bolgeOptions: [ { value: 'AKDENİZ', text: 'AKDENİZ' }, { value: 'EGE', text: 'EGE' }, { value: 'KARADENİZ', text: 'KARADENİZ' }, { value: 'MARMARA', text: 'MARMARA' } ],
       denizOptions: [ { value: 'AKDENİZ', text: 'AKDENİZ' }, { value: 'EGE', text: 'EGE' }, { value: 'VAN GÖLÜ', text: 'VAN GÖLÜ' } ],
-      ilOptions: [ { value: 'Adana', text: 'Adana' }, { value: 'Adıyaman', text: 'Adıyaman' }, { value: 'Afyonkarahisar', text: 'Afyonkarahisar' }, { value: 'Ağrı', text: 'Ağrı' }, { value: 'Amasya', text: 'Amasya' }, { value: 'Ankara', text: 'Ankara' }, { value: 'Antalya', text: 'Antalya' }, { value: 'Artvin', text: 'Artvin' }, { value: 'Aydın', text: 'Aydın' }, { value: 'Balıkesir', text: 'Balıkesir' }, { value: 'Bilecik', text: 'Bilecik' }, { value: 'Bingöl', text: 'Bingöl' }, { value: 'Bitlis', text: 'Bitlis' }, { value: 'Bolu', text: 'Bolu' }, { value: 'Burdur', text: 'Burdur' }, { value: 'Bursa', text: 'Bursa' }, { value: 'Çanakkale', text: 'Çanakkale' }, { value: 'Çankırı', text: 'Çankırı' }, { value: 'Çorum', text: 'Çorum' }, { value: 'Denizli', text: 'Denizli' }, { value: 'Diyarbakır', text: 'Diyarbakır' }, { value: 'Düzce', text: 'Düzce' }, { value: 'Edirne', text: 'Edirne' }, { value: 'Elazığ', text: 'Elazığ' }, { value: 'Erzincan', text: 'Erzincan' }, { value: 'Erzurum', text: 'Erzurum' }, { value: 'Eskişehir', text: 'Eskişehir' }, { value: 'Gaziantep', text: 'Gaziantep' }, { value: 'Giresun', text: 'Giresun' }, { value: 'Gümüşhane', text: 'Gümüşhane' }, { value: 'Hakkari', text: 'Hakkari' }, { value: 'Hatay', text: 'Hatay' }, { value: 'Iğdır', text: 'Iğdır' }, { value: 'Isparta', text: 'Isparta' }, { value: 'İstanbul', text: 'İstanbul' }, { value: 'İzmir', text: 'İzmir' }, { value: 'Kahramanmaraş', text: 'Kahramanmaraş' }, { value: 'Karabük', text: 'Karabük' }, { value: 'Karaman', text: 'Karaman' }, { value: 'Kars', text: 'Kars' }, { value: 'Kastamonu', text: 'Kastamonu' }, { value: 'Kayseri', text: 'Kayseri' }, { value: 'Kırıkkale', text: 'Kırıkkale' }, { value: 'Kırklareli', text: 'Kırklareli' }, { value: 'Kırşehir', text: 'Kırşehir' }, { value: 'Kilis', text: 'Kilis' }, { value: 'Kocaeli', text: 'Kocaeli' }, { value: 'Konya', text: 'Konya' }, { value: 'Kütahya', text: 'Kütahya' }, { value: 'Malatya', text: 'Malatya' }, { value: 'Manisa', text: 'Manisa' }, { value: 'Mardin', text: 'Mardin' }, { value: 'Mersin', text: 'Mersin' }, { value: 'Muğla', text: 'Muğla' }, { value: 'Muş', text: 'Muş' }, { value: 'Nevşehir', text: 'Nevşehir' }, { value: 'Niğde', text: 'Niğde' }, { value: 'Ordu', text: 'Ordu' }, { value: 'Osmaniye', text: 'Osmaniye' }, { value: 'Rize', text: 'Rize' }, { value: 'Sakarya', text: 'Sakarya' }, { value: 'Samsun', text: 'Samsun' }, { value: 'Siirt', text: 'Siirt' }, { value: 'Sinop', text: 'Sinop' }, { value: 'Sivas', text: 'Sivas' }, { value: 'Şanlıurfa', text: 'Şanlıurfa' }, { value: 'Şırnak', text: 'Şırnak' }, { value: 'Tekirdağ', text: 'Tekirdağ' }, { value: 'Tokat', text: 'Tokat' }, { value: 'Trabzon', text: 'Trabzon' }, { value: 'Tunceli', text: 'Tunceli' }, { value: 'Uşak', text: 'Uşak' }, { value: 'Van', text: 'Van' }, { value: 'Yalova', text: 'Yalova' }, { value: 'Yozgat', text: 'Yozgat' }, { value: 'Zonguldak', text: 'Zonguldak' } ],
+     
       uyrukOptions: [ { value: 'suriye', text: 'Suriye' }, { value: 'afganistan', text: 'Afganistan' }, { value: 'pakistan', text: 'Pakistan' }, { value: 'irak', text: 'Irak' }, { value: 'fas', text: 'Fas' }, { value: 'kamerun', text: 'Kamerun' }, { value: 'nijerya', text: 'Nijerya' }, { value: 'cad', text: 'Çad' }, { value: 'tunus', text: 'Tunus' }, { value: 'kenya', text: 'Kenya' }, { value: 'zambiya', text: 'Zambiya' }, { value: 'gana', text: 'Gana' }, { value: 'benin', text: 'Benin' }, { value: 'ozbekistan', text: 'Özbekistan' }, { value: 'uganda', text: 'Uganda' }, { value: 'etiyopya', text: 'Etiyopya' }, { value: 'burkino_faso', text: 'Burkina Faso' }, { value: 'kuveyt', text: 'Kuveyt' }, { value: 'nepal', text: 'Nepal' }, { value: 'togo', text: 'Togo' }, { value: 'haiti', text: 'Haiti' }, { value: 'liberya', text: 'Liberya' }, { value: 'komor_adalari', text: 'Komor Adaları' }, { value: 'urdun', text: 'Ürdün' }, { value: 'moritanya', text: 'Moritanya' }, { value: 'rusya', text: 'Rusya' }, { value: 'azerbaycan', text: 'Azerbaycan' }, { value: 'tanzanya', text: 'Tanzanya' }, { value: 'nijer', text: 'Nijer' }, { value: 'botsvana', text: 'Botsvana' } ],
       gecmeTesebbusOptions: [ { value: 'BULAMAÇ', text: 'BULAMAÇ' }, { value: 'DEDEAĞAÇ', text: 'DEDEAĞAÇ' }, { value: 'KKTC', text: 'KKTC' }, { value: 'LİMNİ', text: 'LİMNİ' }, { value: 'MEİS', text: 'MEİS' }, { value: 'MİDİLLİ', text: 'MİDİLLİ' }, { value: 'RODOS', text: 'RODOS' }, { value: 'SAKIZ', text: 'SAKIZ' }, { value: 'SÖMBEKİ', text: 'SÖMBEKİ' }, { value: 'SİSAM', text: 'SİSAM' }, { value: 'VAN', text: 'VAN' }, { value: 'İSTANKÖY', text: 'İSTANKÖY' }, { value: 'İTALYA', text: 'İTALYA' } ],
       vasitaIsmiOptions: [ { value: '2 CAN SALI', text: '2 CAN SALI' }, { value: '3 CAN SALI', text: '3 CAN SALI' }, { value: '4 CAN SALI', text: '4 CAN SALI' }, { value: 'ADA-34', text: 'ADA-34' }, { value: 'ADA/KARA ÜZERİNDEN', text: 'ADA/KARA ÜZERİNDEN' }, { value: 'ASTERİ', text: 'ASTERİ' }, { value: 'ASİL TÜRK', text: 'ASİL TÜRK' }, { value: 'ATABEY-35', text: 'ATABEY-35' }, { value: 'BODOTO 10', text: 'BODOTO 10' }, { value: 'BİR MASAL', text: 'BİR MASAL' }, { value: 'CAPTAIN ZÜLFÜ', text: 'CAPTAIN ZÜLFÜ' }, { value: 'ÇEPELİ', text: 'ÇEPELİ' }, { value: 'DEDEAĞAÇ', text: 'DEDEAĞAÇ' }, { value: 'DOLPHİ', text: 'DOLPHİ' }, { value: 'ELİF', text: 'ELİF' }, { value: 'EMİNE', text: 'EMİNE' }, { value: 'ERAY', text: 'ERAY' }, { value: 'FENİKS', text: 'FENİKS' }, { value: 'FRİXOS', text: 'FRİXOS' }, { value: 'GOOD MOON', text: 'GOOD MOON' }, { value: 'KARATAŞ 1', text: 'KARATAŞ 1' }, { value: 'KAZAN-1', text: 'KAZAN-1' }, { value: 'KIBRIS', text: 'KIBRIS' }, { value: 'KOTİL', text: 'KOTİL' }, { value: 'LİMON-3', text: 'LİMON-3' }, { value: 'MESUT REİS', text: 'MESUT REİS' }, { value: 'MUĞLA-1', text: 'MUĞLA-1' }, { value: 'MUSTAFA', text: 'MUSTAFA' }, { value: 'NURAY', text: 'NURAY' }, { value: 'ONUR', text: 'ONUR' }, { value: 'PARSS-1 VE ADA 34', text: 'PARSS-1 VE ADA 34' }, { value: 'RACİNG 1', text: 'RACİNG 1' }, { value: 'RAGNAR-47', text: 'RAGNAR-47' }, { value: 'RONYA', text: 'RONYA' }, { value: 'RÜZGAR REİS 01', text: 'RÜZGAR REİS 01' }, { value: 'S. AMAZON 35', text: 'S. AMAZON 35' }, { value: 'SKY 48', text: 'SKY 48' }, { value: 'SUVAARİ', text: 'SUVAARİ' }, { value: 'ŞAHİN-1', text: 'ŞAHİN-1' }, { value: 'T.C.G.S. 902', text: 'T.C.G.S. 902' }, { value: 'T.C.S.G. 311', text: 'T.C.S.G. 311' }, { value: 'TRİTON', text: 'TRİTON' }, { value: 'UMBRA', text: 'UMBRA' }, { value: 'VENESUELLA', text: 'VENESUELLA' }, { value: 'WHİTE GREAM', text: 'WHİTE GREAM' }, { value: 'YEDİTEPE-1', text: 'YEDİTEPE-1' }, { value: 'YUSUF REİS-3', text: 'YUSUF REİS-3' }, { value: 'YÜZEREK', text: 'YÜZEREK' }, { value: 'İSİMSİZ', text: 'İSİMSİZ' }, { value: 'ŞİŞME YATAK', text: 'ŞİŞME YATAK' } ],
@@ -329,11 +350,7 @@ export default {
       kategoriOptions: [ {value: 'Sağ', text: 'Sağ'}, {value: 'Yaralı', text: 'Yaralı'}, {value: 'Kayıp', text: 'Kayıp'}, {value: 'Ölü', text: 'Ölü'} ],
       durumOptions: [ {value: 'Erkek', text: 'Erkek'}, {value: 'Kadın', text: 'Kadın'}, {value: 'Erkek Çocuk', text: 'Erkek Çocuk'}, {value: 'Kız Çocuk', text: 'Kız Çocuk'} ],
       varYokOptions: [ { value: 'Var', text: 'Var' }, { value: 'Yok', text: 'Yok' } ],
-      olayKategoriOptions: [
-        { value: 'Yakalama', text: 'Yakalama' },
-        { value: 'Geri İtme', text: 'Geri İtme' },
-        { value: 'Kurtarma', text: 'Kurtarma' }
-      ],
+      olayKategoriOptions: [ { value: 'Yakalama', text: 'Yakalama' }, { value: 'Geri İtme', text: 'Geri İtme' }, { value: 'Kurtarma', text: 'Kurtarma' } ],
       ihbarTipiOptions: [ { value: 'İhbarlı', text: 'İhbarlı' }, { value: 'İhbarsız', text: 'İhbarsız' } ],
       ihbarKaynagiOptions: [ { value: 'AAKKM', text: 'AAKKM' }, { value: 'ALO 112', text: 'ALO 112' }, { value: 'ÇEŞME KOLDESTİM', text: 'ÇEŞME KOLDESTİM' }, { value: 'ÇEŞMEKOLDES', text: 'ÇEŞMEKOLDES' }, { value: 'DİKİLİ KOLDES', text: 'DİKİLİ KOLDES' }, { value: 'JANDARMA', text: 'JANDARMA' }, { value: 'JRCC PİRE', text: 'JRCC PİRE' }, { value: 'KB-112', text: 'KB-112' }, { value: 'KB-113', text: 'KB-113' }, { value: 'KB-14', text: 'KB-14' }, { value: 'KB-20', text: 'KB-20' }, { value: 'KB-22', text: 'KB-22' }, { value: 'KB-22,KB-89', text: 'KB-22,KB-89' }, { value: 'KB-35', text: 'KB-35' }, { value: 'KB-39', text: 'KB-39' }, { value: 'KB-4510', text: 'KB-4510' }, { value: 'KB-73', text: 'KB-73' }, { value: 'KB-75', text: 'KB-75' }, { value: 'KB-88', text: 'KB-88' }, { value: 'KB-89', text: 'KB-89' }, { value: 'KÜÇÜKKUYU KOLDESTİM', text: 'KÜÇÜKKUYU KOLDESTİM' }, { value: 'MORAD', text: 'MORAD' }, { value: 'MORAD-11', text: 'MORAD-11' }, { value: 'MORAD-12', text: 'MORAD-12' }, { value: 'MORAD-20', text: 'MORAD-20' }, { value: 'NATO', text: 'NATO' }, { value: 'RODOS LİMAN BAŞKANLIĞI', text: 'RODOS LİMAN BAŞKANLIĞI' }, { value: 'SAGUVEGE İSTH.', text: 'SAGUVEGE İSTH.' }, { value: 'SAGÜVEGE İSTH.', text: 'SAGÜVEGE İSTH.' }, { value: 'SAGÜVGÜNEGE İSTH.', text: 'SAGÜVGÜNEGE İSTH.' }, { value: 'SG İHA', text: 'SG İHA' }, { value: 'SGRS ÇEŞME', text: 'SGRS ÇEŞME' }, { value: 'SGYS', text: 'SGYS' }, { value: 'TCSG-107', text: 'TCSG-107' }, { value: 'TCSG-24', text: 'TCSG-24' }, { value: 'TCSG-27', text: 'TCSG-27' }, { value: 'TCSG-30', text: 'TCSG-30' }, { value: 'TCSG-311', text: 'TCSG-311' }, { value: 'TCSG-6', text: 'TCSG-6' }, { value: 'TCSG-61', text: 'TCSG-61' }, { value: 'TCSG-84', text: 'TCSG-84' }, { value: 'TCSG-904', text: 'TCSG-904' }, { value: 'TCSG-907', text: 'TCSG-907' }, { value: 'TCSG-908, TCSG-903, TCSG-66', text: 'TCSG-908, TCSG-903, TCSG-66' } ],
     };
@@ -347,25 +364,58 @@ export default {
       });
     }
   },
+
+  created() {
+    this.loadIller();
+  },
+  watch: {
+    'form.ihbarTipi'(newValue) {
+      if (newValue === 'İhbarsız') {
+        this.form.ihbarKaynagi = null;
+      }
+    }
+  },
   methods: {
+
+    async loadIller() {
+      try {
+        const response = await axios.get('/api/GocmenOperasyon/iller');
+        if (response.data.success) {
+          this.ilOptions = response.data.data.map(il => ({
+            value: il.ilId,
+            text: il.ad
+          }));
+        } else {
+          this.showStatusModal('Hata', 'İl listesi yüklenemedi.', 'danger');
+        }
+      } catch (error) {
+        console.error('İl yükleme hatası:', error);
+        this.showStatusModal('Sunucu Hatası', 'İl listesi yüklenirken bir sorun oluştu.', 'danger');
+      }
+    },
     onIlChange() {
       this.form.ilce = null;
+      this.ilceOptions = []; 
       if (this.form.il) {
         this.loadIlceOptions(this.form.il);
       }
     },
 
-    async loadIlceOptions(il) {
+    async loadIlceOptions(ilId) {
       try {
-        const response = await axios.get(`/api/GocmenOperasyon/ilceler/${il}`);
+        const response = await axios.get(`/api/GocmenOperasyon/ilceler/${ilId}`);
         if (response.data.success) {
-          this.ilceOptions = response.data.data;
+          this.ilceOptions = response.data.data.map(ilce => ({
+            value: ilce.ad, 
+            text: ilce.ad
+          }));
         } else {
           this.ilceOptions = [];
         }
       } catch (error) {
         console.error('İlçe yükleme hatası:', error);
         this.ilceOptions = [];
+        this.showStatusModal('Sunucu Hatası', 'İlçe listesi yüklenirken bir sorun oluştu.', 'danger');
       }
     },
     addUyruk() {
@@ -394,14 +444,14 @@ export default {
     },
     async submitForm() {
       this.isSubmitting = true;
-
+      
       const fieldsToValidate = [
         { key: 'olayNo', label: 'Olay No' }, { key: 'olayTarihi', label: 'Olay Tarihi' }, { key: 'olaySaati', label: 'Olay Saati' }, { key: 'bolge', label: 'Bölge' }, { key: 'deniz', label: 'Deniz' }, { key: 'yer', label: 'Geçme Teşebbüs Yeri' }, { key: 'il', label: 'İl' }, { key: 'ilce', label: 'İlçe' }, { key: 'enlem', label: 'Enlem' }, { key: 'boylam', label: 'Boylam' },
         { key: 'olayKategorisi', label: 'Kategori' }, { key: 'denizeAtma', label: 'Denize Atma' },
         { key: 'vasitaIsmi', label: 'Vasıta İsmi' }, { key: 'kullanilanVasita', label: 'Kullanılan Vasıta' }, 
         { key: 'kategori', label: 'Vasıta Kategori' }, { key: 'uretimYeri', label: 'Vasıta Üretim Yeri' }, { key: 'seriNo', label: 'Vasıta Seri No' }, 
         { key: 'saglamHasarli', label: 'Sağlam/Hasarlı' }, { key: 'benzinVarYok', label: 'Benzin Durumu' }, { key: 'hareketsiz', label: 'Hareketsiz Durumu' },
-        { key: 'ihbarTipi', label: 'İhbar Tipi' }, { key: 'ihbarKaynagi', label: 'İhbar Kaynağı' },
+        { key: 'ihbarTipi', label: 'İhbar Tipi' },
       ];
 
       for (const field of fieldsToValidate) {
@@ -411,6 +461,12 @@ export default {
           this.isSubmitting = false;
           return;
         }
+      }
+
+      if (this.form.ihbarTipi === 'İhbarlı' && !this.form.ihbarKaynagi) {
+          this.showStatusModal('Eksik Bilgi', `Lütfen 'İhbar Kaynağı' alanını doldurunuz.`, 'danger');
+          this.isSubmitting = false;
+          return;
       }
       
       if (this.form.uyruklar.length === 0) {
@@ -427,12 +483,14 @@ export default {
 
       try {
         const olayTarihiDate = new Date(this.form.olayTarihi);
-        
+
+        const selectedIl = this.ilOptions.find(option => option.value === this.form.il);
+
         const payload = {
           ...this.form,
-          
+          il: selectedIl ? selectedIl.text : null,
           kategori: this.form.olayKategorisi,
-
+          
           yil: olayTarihiDate.getFullYear(),
           ay: olayTarihiDate.getMonth() + 1,
           gun: olayTarihiDate.getDate(),
@@ -454,7 +512,7 @@ export default {
         };
         
         delete payload.olayKategorisi;
-
+       
         ['vasitaIsmi', 'kullanilanVasita', 'uretimYeri', 'seriNo', 'benzinVarYok', 'saglamHasarli', 'hareketsiz'].forEach(key => delete payload[key]);
 
         const response = await axios.post('/api/GocmenOperasyon', payload);
@@ -506,7 +564,7 @@ export default {
         hareketsiz: 'Hayır',
         kategoriler: [],
       };
-    this.yeniUyruk = { uyruk: null, sayi: 1 };
+      this.yeniUyruk = { uyruk: null, sayi: 1 };
       this.yeniKategori = { kategori: null, durum: null, sayi: 0 };
       this.ilceOptions = [];
     },
