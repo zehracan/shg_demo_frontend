@@ -7,6 +7,9 @@
       <b-tab title="Excel Yükleme">
         <GocmenExcelYukleme />
       </b-tab>
+      <b-tab title="Onay Listesi">
+        <OperasyonOnayListesi />
+      </b-tab>
     </b-tabs>
   </div>
 </template>
@@ -14,12 +17,14 @@
 <script>
 import GocmenOperasyonFormu from './components/GocmenOperasyonFormu.vue';
 import GocmenExcelYukleme from './components/GocmenExcelYukleme.vue';
+import OperasyonOnayListesi from './components/OperasyonOnayListesi.vue';
 
 export default {
   name: 'App',
   components: {
     GocmenOperasyonFormu,
-    GocmenExcelYukleme
+    GocmenExcelYukleme,
+    OperasyonOnayListesi 
   }
 };
 </script>
