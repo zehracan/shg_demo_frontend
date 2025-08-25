@@ -38,8 +38,20 @@
                   <div class="col-md-6"><b-form-group label="İlçe" label-for="ilce"><b-form-select id="ilce" v-model="form.ilce" :options="ilceOptions" :disabled="!form.il || isDisabled" required><template #first><b-form-select-option :value="null" disabled>İlçe seçiniz</b-form-select-option></template></b-form-select></b-form-group></div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6"><b-form-group label="Enlem (DD MM SS)" label-for="enlem"><b-form-input id="enlem" v-model="form.enlem" placeholder="Örn: 38 33 18" pattern="[0-9]{2} [0-9]{2} [0-9]{2}" required :disabled="isDisabled"></b-form-input><small class="text-muted">Format: DD MM SS</small></b-form-group></div>
-                  <div class="col-md-6"><b-form-group label="Boylam (DDD MM SS)" label-for="boylam"><b-form-input id="boylam" v-model="form.boylam" placeholder="Örn: 026 18 42" pattern="[0-9]{3} [0-9]{2} [0-9]{2}" required :disabled="isDisabled"></b-form-input><small class="text-muted">Format: DDD MM SS</small></b-form-group></div>
+                  <div class="col-md-6">
+                    <b-form-group label="Enlem (DD MM SS)" label-for="enlem">
+                      <b-form-input id="enlem" v-model="form.enlem" placeholder="Örn: 38 33 18" pattern="[0-9]{2} [0-9]{2} [0-9]{2}" required :disabled="isDisabled"></b-form-input>
+                      <small class="text-muted">Format: DD MM SS</small>
+                      <div v-if="enlemError" class="text-danger mt-1">{{ enlemError }}</div>
+                    </b-form-group>
+                  </div>
+                  <div class="col-md-6">
+                    <b-form-group label="Boylam (DDD MM SS)" label-for="boylam">
+                      <b-form-input id="boylam" v-model="form.boylam" placeholder="Örn: 026 18 42" pattern="[0-9]{3} [0-9]{2} [0-9]{2}" required :disabled="isDisabled"></b-form-input>
+                      <small class="text-muted">Format: DDD MM SS</small>
+                      <div v-if="boylamError" class="text-danger mt-1">{{ boylamError }}</div>
+                    </b-form-group>
+                  </div>
                 </div>
               </fieldset>
               <div v-if="!isDisabled" class="d-flex justify-content-end mt-3">
@@ -56,7 +68,8 @@
                   <div class="col-md-4"><b-form-group label-class="font-weight-bold" label="Sayı"><b-form-input v-model.number="yeniUyruk.sayi" type="number" min="1"></b-form-input></b-form-group></div>
                   <div class="col-md-2 mb-3"><b-button variant="success" @click="addUyruk" class="w-100">Ekle</b-button></div>
                 </div>
-                <b-table striped hover :items="form.uyruklar" :fields="uyrukFields" responsive="sm" v-if="form.uyruklar && form.uyruklar.length > 0">
+   
+                <b-table striped hover :items="form.uyruklar" :fields="displayedUyrukFields" responsive="sm" v-if="form.uyruklar && form.uyruklar.length > 0">
                     <template #cell(actions)="row">
                       <b-button v-if="!isDisabled" size="sm" variant="danger" @click="removeUyruk(row.index)">Sil</b-button>
                     </template>
@@ -103,8 +116,8 @@
                     <div class="col-md-3"><b-form-group label-class="font-weight-bold" label="Sayı"><b-form-input v-model.number="yeniKategori.sayi" type="number" min="0"></b-form-input></b-form-group></div>
                     <div class="col-md-2 mb-3"><b-button variant="success" @click="addKategori" class="w-100">Ekle</b-button></div>
                 </div>
-                <!-- DEĞİŞİKLİK: Tablo verisi `form.kategoriler` oldu -->
-                <b-table striped hover :items="form.kategoriler" :fields="kategoriFields" responsive="sm" v-if="form.kategoriler && form.kategoriler.length > 0">
+
+                <b-table striped hover :items="form.kategoriler" :fields="displayedKategoriFields" responsive="sm" v-if="form.kategoriler && form.kategoriler.length > 0">
                     <template #cell(actions)="row">
                       <b-button v-if="!isDisabled" size="sm" variant="danger" @click="removeKategori(row.index)">Sil</b-button>
                     </template>
@@ -162,7 +175,7 @@ const getDefaultFormState = () => ({
   yer: null,
   enlem: '',
   boylam: '',
-  olayKategorisi: null,
+  olayKategorisi: null, 
   denizeAtma: null,
   yakalananTurk: 0,
   organizatorSayisi: 0,
@@ -172,13 +185,13 @@ const getDefaultFormState = () => ({
   uyruklar: [],
   vasitaIsmi: null,
   kullanilanVasita: null,
-  kategori: null,
+  kategori: null, 
   uretimYeri: null,
   seriNo: null,
   benzinVarYok: 'Yok',
   saglamHasarli: 'Sağlam',
   hareketsiz: 'Hayır',
-  kategoriler: [],
+  kategoriler: [], 
 });
 
 
@@ -198,13 +211,15 @@ export default {
   data() {
     return {
       tabIndex: 0,
-      form: getDefaultFormState(), // Form state'ini fonksiyonla başlat
+      form: getDefaultFormState(), 
       yeniUyruk: { uyruk: null, sayi: 1 },
       yeniKategori: { kategori: null, durum: null, sayi: 0 },
       isSubmitting: false,
       modalTitle: '',
       modalMessage: '',
       modalVariant: 'success',
+      boylamError: '', 
+      enlemError: '', 
      
       ilOptions: [],
       ilceOptions: [],
@@ -219,8 +234,6 @@ export default {
       vasitaKategoriOptions: [ { value: 'LASTİK BOT', text: 'LASTİK BOT' }, { value: 'FİBER KARİNALI LASTİK BOT', text: 'FİBER KARİNALI LASTİK BOT' }, { value: 'CAN SALI', text: 'CAN SALI' }, { value: 'SÜRAT TEKNESİ', text: 'SÜRAT TEKNESİ' } ],
       vasitaUretimYeriOptions: [ { value: 'SANCAK TEKNE (SANCAK 6,9)', text: 'SANCAK TEKNE (SANCAK 6,9)' } ],
       vasitaSeriNoOptions: [ { value: 'TR SEMA 4664J424MOTOR NO:3B624947 (150 HP)', text: 'TR SEMA 4664J424MOTOR NO:3B624947 (150 HP)' } ],
-      uyrukFields: [ { key: 'uyruk', label: 'Uyruk' }, { key: 'sayi', label: 'Sayı' }, { key: 'actions', label: 'İşlemler', class: 'text-right' } ],
-      kategoriFields: [ { key: 'kategori', label: 'Kategori' }, { key: 'durum', label: 'Durum (Cinsiyet)' }, { key: 'sayi', label: 'Sayı' }, { key: 'actions', label: 'İşlemler', class: 'text-right' } ],
       sgOptions: [ { text: 'SG', value: true }, { text: 'Müşterek', value: false } ],
       kategoriOptions: [ {value: 'Sağ', text: 'Sağ'}, {value: 'Yaralı', text: 'Yaralı'}, {value: 'Kayıp', text: 'Kayıp'}, {value: 'Ölü', text: 'Ölü'} ],
       durumOptions: [ {value: 'Erkek', text: 'Erkek'}, {value: 'Kadın', text: 'Kadın'}, {value: 'Erkek Çocuk', text: 'Erkek Çocuk'}, {value: 'Kız Çocuk', text: 'Kız Çocuk'} ],
@@ -237,6 +250,30 @@ export default {
         month: 'long',
         day: 'numeric'
       });
+    },
+
+    displayedUyrukFields() {
+      const baseFields = [
+        { key: 'uyruk', label: 'Uyruk' }, 
+        { key: 'sayi', label: 'Sayı' }
+      ];
+    
+      if (!this.isDisabled) {
+        baseFields.push({ key: 'actions', label: 'İşlemler', class: 'text-right' });
+      }
+      return baseFields;
+    },
+
+    displayedKategoriFields() {
+      const baseFields = [
+        { key: 'kategori', label: 'Kategori' }, 
+        { key: 'durum', label: 'Durum (Cinsiyet)' }, 
+        { key: 'sayi', label: 'Sayı' }
+      ];
+      if (!this.isDisabled) {
+        baseFields.push({ key: 'actions', label: 'İşlemler', class: 'text-right' });
+      }
+      return baseFields;
     }
   },
 
@@ -244,11 +281,11 @@ export default {
   watch: {
     initialData: {
       handler(dataToLoad) {
-        // Yeni veri geldiğinde formu doldurmak için bu metodu çağır
+        
         if (dataToLoad && dataToLoad.olayId) {
           this.populateForm(dataToLoad);
         } else {
-          // Eğer initialData boş gelirse, formu sıfırla (yeni kayıt modu için)
+       
           this.resetForm();
         }
       },
@@ -259,6 +296,14 @@ export default {
       if (newValue === 'İhbarsız') {
         this.form.ihbarKaynagi = null;
       }
+    },
+ 
+    'form.enlem'(newValue) {
+      this.validateEnlemField(newValue);
+    },
+
+    'form.boylam'(newValue) {
+      this.validateBoylamField(newValue);
     }
   },
 
@@ -268,16 +313,17 @@ export default {
 
   methods: {
     async populateForm(dataToLoad) {
-      // 1. Gelen verinin derin bir kopyasını alarak formu doldur.
-      // Bu, `uyruklar` ve `kategoriler` gibi dizilerin doğru şekilde yüklenmesini sağlar.
+      console.log('--- populateForm called with initialData ---');
+      console.log('dataToLoad (full object):', dataToLoad); 
+
       const formData = JSON.parse(JSON.stringify(dataToLoad));
       
-      // 2. Backend'den gelen 'vasitalar' dizisindeki ilk elemanı alıp formdaki ilgili alanlara ata.
+
       if (formData.vasitalar && formData.vasitalar.length > 0) {
         const vasitaData = formData.vasitalar[0];
         formData.vasitaIsmi = vasitaData.vasitaIsmi;
         formData.kullanilanVasita = vasitaData.kullanilanVasita;
-        formData.kategori = vasitaData.kategori;
+        formData.kategori = vasitaData.kategori; 
         formData.uretimYeri = vasitaData.uretimYeri;
         formData.seriNo = vasitaData.seriNo;
         formData.benzinVarYok = vasitaData.benzinVarYok;
@@ -285,39 +331,59 @@ export default {
         formData.hareketsiz = vasitaData.hareketsiz;
       }
 
-      // Backend'den gelen 'kategori' alanını, formdaki 'olayKategorisi' ile eşleştir
-      formData.olayKategorisi = formData.kategori;
 
-      // 3. İl/İlçe dropdown'larını ayarlama
-      // Önce il options'larının yüklendiğinden emin ol
+      const apiOlayKategoriValue = dataToLoad.kategori; 
+      console.log('1. API\'den gelen Ana Olay Kategori değeri (dataToLoad.kategori):', apiOlayKategoriValue);
+      console.log('2. Olay Kategori seçeneklerimiz (olayKategoriOptions):', this.olayKategoriOptions);
+
+      if (apiOlayKategoriValue) {
+ 
+        const matchingOlayKategoriOption = this.olayKategoriOptions.find(option =>
+          option.value && apiOlayKategoriValue && option.value.toLowerCase() === apiOlayKategoriValue.toLowerCase()
+        );
+
+        if (matchingOlayKategoriOption) {
+          formData.olayKategorisi = matchingOlayKategoriOption.value;
+          console.log('3. Eşleşen olayKategorisi seçeneği bulundu ve atandı:', formData.olayKategorisi);
+        } else {
+          formData.olayKategorisi = null;
+          console.log(`3. Olay Kategorisi için '${apiOlayKategoriValue}' değeri ile eşleşen seçenek bulunamadı. formData.olayKategorisi null olarak ayarlandı.`);
+        }
+      } else {
+        formData.olayKategorisi = null; 
+        console.log('3. API\'den olay kategorisi değeri gelmedi veya boştu. formData.olayKategorisi null olarak ayarlandı.');
+      }
+
+
       if (this.ilOptions.length === 0) {
         await this.loadIller();
       }
 
       const selectedIlObj = this.ilOptions.find(opt => opt.text === formData.il);
       if (selectedIlObj) {
-        formData.il = selectedIlObj.value; // Formdaki `il` değerini ID olarak ayarla
-        await this.loadIlceOptions(formData.il); // İlçeleri yükle
-        // İlçe değeri metin olarak geldiği için, onu da `value` olarak ayarla
+        formData.il = selectedIlObj.value; 
+        await this.loadIlceOptions(formData.il); 
         formData.ilce = dataToLoad.ilce;
       }
       
-      // 4. Hazırlanan veriyi form'a ata
+     
       this.form = formData;
+      console.log('4. populateForm bitişi. form.olayKategorisi değeri (final):', this.form.olayKategorisi); // Formdaki son değeri logla
+      console.log('--- populateForm finished ---');
     },
 
     handleTabActivation(newTabIndex, prevTabIndex, bvEvent) {
-      // Salt okunur modda tab değiştirmeyi ENGELLEME, kullanıcının veriyi görmesine izin ver.
+     
       if (this.isDisabled) {
         return; 
       }
       
-      // Geri tuşuna basıldığında validasyon yapma
+
       if (newTabIndex < prevTabIndex) {
         return;
       }
       
-      // İleri giderken önceki tüm tabları valide et
+
       for (let i = 0; i < newTabIndex; i++) {
         if (!this.validateTabByIndex(i)) {
           bvEvent.preventDefault(); 
@@ -346,6 +412,35 @@ export default {
     validateCurrentTab() {
       return this.validateTabByIndex(this.tabIndex);
     },
+
+    validateEnlemField(value) {
+      if (!value) {
+        this.enlemError = ''; 
+        return true;
+      }
+      const enlemPattern = /^[0-9]{2} [0-9]{2} [0-9]{2}$/;
+      if (!enlemPattern.test(value)) {
+        this.enlemError = 'Enlem formatı yanlış. Örn: 38 33 18 (DD MM SS)';
+        return false;
+      }
+      this.enlemError = ''; 
+      return true;
+    },
+
+    validateBoylamField(value) {
+      if (!value) {
+        this.boylamError = ''; 
+        return true;
+      }
+      const boylamPattern = /^[0-9]{3} [0-9]{2} [0-9]{2}$/;
+      if (!boylamPattern.test(value)) {
+        this.boylamError = 'Boylam formatı yanlış. Örn: 026 18 42 (DDD MM SS)';
+        return false;
+      }
+      this.boylamError = ''; 
+      return true;
+    },
+
     validateAnaOlayTab() {
       const fields = [
         { key: 'olayNo', label: 'Olay No' }, { key: 'olayTarihi', label: 'Olay Tarihi' }, { key: 'olaySaati', label: 'Olay Saati' }, { key: 'bolge', label: 'Bölge' }, { key: 'deniz', label: 'Deniz' }, { key: 'yer', label: 'Geçme Teşebbüs Yeri' }, { key: 'il', label: 'İl' }, { key: 'ilce', label: 'İlçe' }, { key: 'enlem', label: 'Enlem' }, { key: 'boylam', label: 'Boylam' }, { key: 'olayKategorisi', label: 'Kategori' }, { key: 'denizeAtma', label: 'Denize Atma' }
@@ -357,6 +452,16 @@ export default {
           return false;
         }
       }
+
+      if (!this.validateEnlemField(this.form.enlem)) {
+        this.showStatusModal('Format Hatası', this.enlemError, 'warning');
+        return false;
+      }
+      if (!this.validateBoylamField(this.form.boylam)) {
+        this.showStatusModal('Format Hatası', this.boylamError, 'warning');
+        return false;
+      }
+
       return true;
     },
     validateUyrukTab() {
@@ -454,12 +559,17 @@ export default {
     async submitForm() {
       this.isSubmitting = true;
 
+      if (!this.validateTabByIndex(0) || !this.validateTabByIndex(1) || !this.validateTabByIndex(2) || !this.validateTabByIndex(3)) {
+          this.isSubmitting = false;
+          return;
+      }
+      
       const digerBilgilerFields = [
         { key: 'ihbarTipi', label: 'İhbar Tipi' },
       ];
       for (const field of digerBilgilerFields) {
         if (!this.form[field.key]) {
-          this.showStatusModal('Eksik Bilgi', `Lütfen '${field.label}' alanını doldurunuz.`, 'danger');
+          this.showStatusModal('Eksik Bilgi', `Lütfen '5. Diğer Bilgiler ve Kayıt' sekmesindeki '${field.label}' alanını doldurunuz.`, 'danger');
           this.isSubmitting = false;
           return;
         }
@@ -471,11 +581,6 @@ export default {
           return;
       }
       
-      if (!this.validateTabByIndex(0) || !this.validateTabByIndex(1) || !this.validateTabByIndex(2) || !this.validateTabByIndex(3)) {
-          this.isSubmitting = false;
-          return;
-      }
-
       try {
         const olayTarihiDate = new Date(this.form.olayTarihi);
         
@@ -484,7 +589,7 @@ export default {
         const payload = {
           ...this.form,
           il: selectedIl ? selectedIl.text : null,
-          kategori: this.form.olayKategorisi,
+          kategori: this.form.olayKategorisi, 
          
           yil: olayTarihiDate.getFullYear(),
           ay: olayTarihiDate.getMonth() + 1,
@@ -497,7 +602,7 @@ export default {
           vasitalar: [{
             vasitaIsmi: this.form.vasitaIsmi,
             kullanilanVasita: this.form.kullanilanVasita,
-            kategori: this.form.kategori,
+            kategori: this.form.kategori, 
             uretimYeri: this.form.uretimYeri,
             seriNo: this.form.seriNo,
             benzinVarYok: this.form.benzinVarYok,
@@ -506,8 +611,7 @@ export default {
           }]
         };
         
-        delete payload.olayKategorisi;
-        
+        delete payload.olayKategorisi; 
         ['vasitaIsmi', 'kullanilanVasita', 'uretimYeri', 'seriNo', 'benzinVarYok', 'saglamHasarli', 'hareketsiz'].forEach(key => delete payload[key]);
 
         const response = await axios.post('/api/GocmenOperasyon', payload);
@@ -533,6 +637,8 @@ export default {
       this.yeniKategori = { kategori: null, durum: null, sayi: 0 };
       this.ilceOptions = [];
       this.tabIndex = 0;
+      this.boylamError = ''; 
+      this.enlemError = ''; 
     },
     showStatusModal(title, message, variant) {
       this.modalTitle = title;
